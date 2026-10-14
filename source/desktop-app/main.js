@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
+const fs = require('fs').promises;
 
 let mainWindow;
 
@@ -59,4 +60,24 @@ ipcMain.on('build-mod', (event) => {
   child.on('close', (code) => {
     event.sender.send('build-finished', { code, log });
   });
+});
+
+ipcMain.handle('save-project', async (event, payload) => {
+  // payload: { files: [{ path: 'relative/path', content: '...' }], modId: string }
+  try {
+    const modRoot = path.resolve(__dirname, '../forge-mdk');
+    for (const f of payload.files) {
+      const dest = path.resolve(modRoot, f.path);
+      const dir = path.dirname(dest);
+      await fs.mkdir(dir, { recursive: true });
+      if (f.encoding === 'base64') {
+        await fs.writeFile(dest, Buffer.from(f.content, 'base64'));
+      } else {
+        await fs.writeFile(dest, f.content, 'utf8');
+      }
+    }
+    return { ok: true, message: 'Project saved to forge-mdk' };
+  } catch (err) {
+    return { ok: false, message: String(err) };
+  }
 });

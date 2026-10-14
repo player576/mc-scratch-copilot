@@ -1,101 +1,99 @@
-function generateItemCode(block) {
-  const name = block.getFieldValue('NAME') || 'example_item';
-  const texture = block.getFieldValue('TEXTURE') || 'example_item';
-  const tab = block.getFieldValue('TAB') || 'tools';
-  const damage = Blockly.Java.valueToCode(block, 'DAMAGE', Blockly.Java.ORDER_ATOMIC) || '0';
-  const durability = Blockly.Java.valueToCode(block, 'DURABILITY', Blockly.Java.ORDER_ATOMIC) || '100';
-
-  return `
-public static final RegistryObject<Item> ${toPascal(name)} = ITEMS.register("${name}", () ->
-    new Item(new Item.Properties()
-        .stacksTo(64)
-        .durability(${durability})
-        .rarity(Rarity.COMMON)));
-
-@SubscribeEvent
-public static void onRegisterItem(FMLCommonSetupEvent event) {
-    // Generated texture: assets/mcscaffold/textures/item/${texture}.png
-    // Creative tab: ${tab}
-    // Base damage: ${damage}
-}
-`;
-}
-
-function generateBlockCode(block) {
-  const name = block.getFieldValue('NAME') || 'example_block';
-  const hardness = Blockly.Java.valueToCode(block, 'HARDNESS', Blockly.Java.ORDER_ATOMIC) || '2.0F';
-  const resistance = Blockly.Java.valueToCode(block, 'RESISTANCE', Blockly.Java.ORDER_ATOMIC) || '6.0F';
-  const tool = block.getFieldValue('TOOL') || 'pickaxe';
-
-  return `
-public static final RegistryObject<Block> ${toPascal(name)} = BLOCKS.register("${name}", () ->
-    new Block(BlockBehaviour.Properties.of().strength(${hardness}, ${resistance}).requiresCorrectToolForDrops()));
-
-public static final RegistryObject<Item> ${toPascal(name)}_ITEM = ITEMS.register("${name}", () ->
-    new BlockItem(${toPascal(name)}.get(), new Item.Properties()));
-
-public static void registerBlockDrop() {
-    // Tool required: ${tool}
-    // Generated block JSON in assets/mcscaffold/models/block/${name}.json
-}
-`;
-}
-
-function toPascal(value) {
-  return value
-    .split(/[_\-\s]+/)
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join('');
-}
-
-function buildModJavaFromBlocks() {
+// New function to build file list for saving to MDK
+function buildModFilesFromBlocks(modId) {
   const workspace = window.workspace;
   const blocks = workspace.getTopBlocks(true);
-  const generated = [];
+  const files = [];
 
-  generated.push('package com.example.mcscaffold;');
-  generated.push('');
-  generated.push('import net.minecraft.world.item.Item;');
-  generated.push('import net.minecraft.world.item.BlockItem;');
-  generated.push('import net.minecraft.world.level.block.Block;');
-  generated.push('import net.minecraft.world.level.block.state.BlockBehaviour;');
-  generated.push('import net.minecraftforge.eventbus.api.IEventBus;');
-  generated.push('import net.minecraftforge.fml.common.Mod;');
-  generated.push('import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;');
-  generated.push('import net.minecraftforge.registries.DeferredRegister;');
-  generated.push('import net.minecraftforge.registries.ForgeRegistries;');
-  generated.push('import net.minecraftforge.registries.RegistryObject;');
-  generated.push('');
-  generated.push('@Mod("mcscaffold")');
-  generated.push('public class MCScaffold {');
-  generated.push('    public static final String MODID = "mcscaffold";');
-  generated.push('    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);');
-  generated.push('    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);');
-  generated.push('');
-  generated.push('    public MCScaffold() {');
-  generated.push('        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();');
-  generated.push('        BLOCKS.register(bus);');
-  generated.push('        ITEMS.register(bus);');
-  generated.push('    }');
-  generated.push('');
+  // Use the same generated Java for MCScaffold.java
+  const mainJava = buildModJavaFromBlocks();
+  const packagePath = 'com/example/mcscaffold';
+
+  files.push({ path: `src/main/java/${packagePath}/MCScaffold.java`, content: mainJava });
+
+  // Create ModItems and ModBlocks from top blocks
+  let itemsCode = 'package com.example.mcscaffold;\n\nimport net.minecraft.world.item.Item;\nimport net.minecraftforge.registries.RegistryObject;\n\npublic class ModItems {\n';
+  let blocksCode = 'package com.example.mcscaffold;\n\nimport net.minecraft.world.item.BlockItem;\nimport net.minecraft.world.item.Item;\nimport net.minecraft.world.level.block.Block;\nimport net.minecraftforge.registries.RegistryObject;\n\npublic class ModBlocks {\n';
 
   for (const block of blocks) {
-    const type = block.type;
-    if (type === 'create_item') {
-      generated.push(generateItemCode(block));
+    if (block.type === 'create_item') {
+      const name = block.getFieldValue('NAME') || 'example_item';
+      const constName = name.toUpperCase().replace(/[^A-Z0-9]/g, '_');
+      itemsCode += `    public static final RegistryObject<Item> ${constName} = MCScaffold.ITEMS.register("${name}", () -> new Item(new Item.Properties()));\n`;
     }
-    if (type === 'create_block') {
-      generated.push(generateBlockCode(block));
-    }
-    if (type === 'recipe_craft') {
-      generated.push('    // Crafting recipe generated for: ' + (block.getFieldValue('RESULT') || 'example_item'));
-    }
-    if (type === 'recipe_smelt') {
-      generated.push('    // Smelting recipe generated for: ' + (block.getFieldValue('RESULT') || 'example_item'));
+    if (block.type === 'create_block') {
+      const name = block.getFieldValue('NAME') || 'example_block';
+      const constName = name.toUpperCase().replace(/[^A-Z0-9]/g, '_');
+      blocksCode += `    public static final RegistryObject<Block> ${constName} = MCScaffold.BLOCKS.register("${name}", () -> new Block(BlockBehaviour.Properties.of().strength(2.0F, 6.0F).requiresCorrectToolForDrops()));\n`;
+      blocksCode += `    public static final RegistryObject<Item> ${constName}_ITEM = MCScaffold.ITEMS.register("${name}", () -> new BlockItem(${constName}.get(), new Item.Properties()));\n`;
     }
   }
 
-  generated.push('}');
-  return generated.join('\n');
+  itemsCode += '}\n';
+  blocksCode += '}\n';
+
+  files.push({ path: `src/main/java/${packagePath}/ModItems.java`, content: itemsCode });
+  files.push({ path: `src/main/java/${packagePath}/ModBlocks.java`, content: blocksCode });
+
+  // Resources: lang, models placeholders
+  const enUs = {};
+  for (const block of blocks) {
+    if (block.type === 'create_item') {
+      const name = block.getFieldValue('NAME') || 'example_item';
+      enUs[`item.${modId}.${name}`] = toTitle(name);
+      // item model
+      const itemModel = {
+        parent: 'item/generated',
+        textures: { layer0: ` ${"assets/" + modId + "/textures/item/"}${name}.png` }
+      };
+      files.push({ path: `src/main/resources/assets/${modId}/models/item/${name}.json`, content: JSON.stringify(itemModel, null, 2) });
+    }
+    if (block.type === 'create_block') {
+      const name = block.getFieldValue('NAME') || 'example_block';
+      enUs[`block.${modId}.${name}`] = toTitle(name);
+      const blockModel = {
+        parent: 'block/cube_all',
+        textures: { all: ` ${"assets/" + modId + "/textures/block/"}${name}.png` }
+      };
+      files.push({ path: `src/main/resources/assets/${modId}/models/block/${name}.json`, content: JSON.stringify(blockModel, null, 2) });
+      // block item model
+      const blockItemModel = {
+        parent: ` ${"assets/" + modId + "/models/block/"}${name}`
+      };
+      files.push({ path: `src/main/resources/assets/${modId}/models/item/${name}.json`, content: JSON.stringify(blockItemModel, null, 2) });
+    }
+  }
+
+  // lang file
+  files.push({ path: `src/main/resources/assets/${modId}/lang/en_us.json`, content: JSON.stringify(enUs, null, 2) });
+
+  // mods.toml will be updated to set modId
+  const modsToml = `modLoader=\"forge\"\nloaderVersion=\"[47,)\"\nlicense=\"MIT\"\n[[mods]]\nmodId=\"${modId}\"\nversion=\"1.0.0\"\ndisplayName=\"MC Scaffold\"\nlogoFile=\"icon.png\"\ncredits=\"MC Scratch Copilot\"\nauthors=\"Player576\"\ndescription=\"Scratch-style mod builder for Forge 1.20.1.\"\n`;
+  files.push({ path: 'src/main/resources/META-INF/mods.toml', content: modsToml });
+
+  // simple example recipe if any recipe blocks exist
+  for (const block of blocks) {
+    if (block.type === 'recipe_craft') {
+      const result = block.getFieldValue('RESULT') || 'example_item';
+      const recipe = {
+        type: 'minecraft:crafting_shaped',
+        pattern: ['XXX', 'XXX', 'XXX'],
+        key: { X: { item: block.getFieldValue('INGREDIENT') || 'minecraft:diamond' } },
+        result: { item: `${modId}:${result}`, count: 1 }
+      };
+      files.push({ path: `src/main/resources/data/${modId}/recipes/${result}_recipe.json`, content: JSON.stringify(recipe, null, 2) });
+    }
+    if (block.type === 'recipe_smelt') {
+      const result = block.getFieldValue('RESULT') || 'example_item';
+      const recipe = {
+        type: 'minecraft:smelting',
+        ingredient: { item: block.getFieldValue('SOURCE') || 'minecraft:iron_ore' },
+        result: `${modId}:${result}`,
+        experience: 0.7,
+        cookingtime: 200
+      };
+      files.push({ path: `src/main/resources/data/${modId}/recipes/${result}_smelt.json`, content: JSON.stringify(recipe, null, 2) });
+    }
+  }
+
+  return files;
 }
