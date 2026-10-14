@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MC Scratch Copilot</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-wrap">
+          <div class="brand-icon">M</div>
+          <div>
+            <div class="brand-title">MC Scratch Copilot</div>
+            <div class="brand-sub">Forge 1.20.1 Mod Builder</div>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="ghost-btn" id="generateCodeBtn">Generate Java</button>
+          <button class="primary-btn" id="buildModBtn">Build Mod (.jar)</button>
+        </div>
+      </header>
+
+      <div class="main-layout">
+        <aside class="sidebar">
+          <div class="panel-header">Categories</div>
+          <div class="category-list">
+            <button class="cat active" data-category="items">Items</button>
+            <button class="cat" data-category="blocks">Blocks</button>
+            <button class="cat" data-category="entities">Entities</button>
+            <button class="cat" data-category="recipes">Recipes</button>
+            <button class="cat" data-category="events">Events</button>
+          </div>
+
+          <div class="palette-box" id="paletteBox">
+            <div class="palette-title">Scratch-like toolbox</div>
+            <ul>
+              <li>Item</li>
+              <li>Block</li>
+              <li>Recipe</li>
+              <li>When clicked</li>
+              <li>When item used</li>
+              <li>On entity hit</li>
+            </ul>
+          </div>
+        </aside>
+
+        <main class="workspace-panel">
+          <div class="workspace-toolbar">
+            <button class="tool-btn">Scripts</button>
+            <button class="tool-btn">Assets</button>
+            <button class="tool-btn">Code</button>
+            <button class="tool-btn">Preview</button>
+          </div>
+
+          <div id="blocklyDiv" class="blockly-panel"></div>
+        </main>
+
+        <aside class="details-panel">
+          <div class="panel-header">Properties</div>
+
+          <div class="property-card">
+            <label>Mod ID</label>
+            <input id="modIdInput" value="mcscaffold" />
+          </div>
+
+          <div class="property-card">
+            <label>Display Name</label>
+            <input id="modNameInput" value="MC Scaffold" />
+          </div>
+
+          <div class="property-card">
+            <label>Author</label>
+            <input id="authorInput" value="Player576" />
+          </div>
+
+          <div class="property-card">
+            <label>Java Output</label>
+            <textarea id="codeOutput" readonly></textarea>
+          </div>
+
+          <div class="property-card">
+            <label>Build Log</label>
+            <pre id="buildLog">Idle</pre>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <script src="blocks.js"></script>
+    <script src="generator.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

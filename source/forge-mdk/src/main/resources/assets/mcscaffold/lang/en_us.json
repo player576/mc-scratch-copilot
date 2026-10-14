@@ -1,0 +1,5 @@
+{
+  "item.mcscaffold.example_item": "Example Item",
+  "block.mcscaffold.example_block": "Example Block",
+  "itemGroup.mcscaffold": "MC Scaffold"
+}

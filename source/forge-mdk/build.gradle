@@ -1,0 +1,33 @@
+plugins { id 'net.minecraftforge.gradle' version '6.0.16' }
+
+group = 'com.example'
+version = '1.0.0'
+archivesBaseName = 'mcscaffold'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+minecraft {
+    mappingsChannel = 'official'
+    mappingsVersion = '1.20.1'
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.minecraftforge.net' }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.1-47.2.0'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    archiveClassifier = 'forge-1.20.1'
+}

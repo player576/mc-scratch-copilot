@@ -1,0 +1,222 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Segoe UI", sans-serif;
+  background: #0f111a;
+  color: #f3f6ff;
+}
+
+.app-shell {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #171d2a, #0d1119);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: #151b27;
+}
+
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ff8b3d, #ff5a8d);
+  font-weight: 800;
+  color: white;
+  box-shadow: 0 10px 30px rgba(255, 122, 92, 0.35);
+}
+
+.brand-title {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.brand-sub {
+  font-size: 11px;
+  color: #a4b6d5;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+button:hover { transform: translateY(-1px); }
+
+.primary-btn {
+  background: linear-gradient(135deg, #ffaf1c, #ff6a00);
+  color: #fff;
+}
+
+.ghost-btn {
+  background: rgba(255,255,255,0.06);
+  color: #dfe8ff;
+}
+
+.main-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 360px;
+  min-height: 0;
+}
+
+.sidebar, .details-panel {
+  background: rgba(18, 22, 31, 0.9);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  padding: 16px;
+}
+
+.panel-header {
+  font-size: 12px;
+  color: #8ea5d8;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cat {
+  text-align: left;
+  background: rgba(255,255,255,0.04);
+  color: #dbe3ff;
+  padding: 12px 14px;
+}
+
+.cat.active {
+  background: linear-gradient(90deg, rgba(76, 164, 242, 0.3), rgba(161, 87, 255, 0.2));
+  border: 1px solid rgba(117, 184, 255, 0.35);
+}
+
+.palette-box {
+  margin-top: 18px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 14px;
+}
+
+.palette-title {
+  color: #a8c0ff;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.palette-box ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #cedaff;
+  line-height: 2;
+}
+
+.workspace-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.workspace-toolbar {
+  display: flex;
+  gap: 10px;
+  padding: 14px 18px 8px 18px;
+  background: rgba(15,17,26,0.9);
+}
+
+.tool-btn {
+  background: rgba(255,255,255,0.04);
+  color: #dfe8ff;
+  padding: 8px 12px;
+}
+
+.blockly-panel {
+  flex: 1;
+  min-height: 500px;
+  background: #dfe7ff;
+}
+
+.details-panel {
+  border-left: 1px solid rgba(255,255,255,0.06);
+}
+
+.property-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.property-card label {
+  font-size: 12px;
+  color: #9db3de;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.property-card input,
+.property-card textarea {
+  width: 100%;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,25,0.75);
+  color: #edf5ff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+}
+
+.property-card textarea {
+  min-height: 180px;
+  resize: vertical;
+  font-family: "Consolas", monospace;
+  font-size: 12px;
+}
+
+#buildLog {
+  margin: 0;
+  min-height: 140px;
+  max-height: 220px;
+  overflow: auto;
+  white-space: pre-wrap;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #dfeafe;
+  background: rgba(9,12,18,0.7);
+  border-radius: 8px;
+  padding: 10px;
+}
