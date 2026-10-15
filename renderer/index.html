@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>MC Scratch Copilot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>MC Scratch Copilot — Forge 1.20.1</h1>
+    </header>
+    <div id="main">
+      <aside id="palette">
+        <h2>Categories</h2>
+        <ul>
+          <li data-category="items">Items</li>
+          <li data-category="blocks">Blocks</li>
+          <li data-category="entities">Entities</li>
+          <li data-category="recipes">Recipes</li>
+          <li data-category="events">Events</li>
+        </ul>
+        <div id="controls">
+          <input id="modid" placeholder="modid (mc_scratch_mod)" />
+          <input id="modname" placeholder="Mod Name (ScratchMod)" />
+          <button id="generate">Сгенерировать проект</button>
+          <button id="build">Собрать .jar</button>
+        </div>
+      </aside>
+      <section id="workspace">
+        <div id="blocklyDiv"></div>
+      </section>
+      <aside id="preview">
+        <h3>Logs</h3>
+        <pre id="log"></pre>
+      </aside>
+    </div>
+  </div>
+  <script src="../node_modules/blockly/blockly.min.js"></script>
+  <script src="blocks/blocks.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>

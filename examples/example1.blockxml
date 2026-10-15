@@ -1,0 +1,12 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="create_item" x="20" y="20">
+    <field name="ID">example_item</field>
+    <field name="NAME">Example Item</field>
+    <field name="TEXTURE">textures/item/example_item.png</field>
+  </block>
+  <block type="create_block" x="20" y="120">
+    <field name="ID">example_block</field>
+    <field name="HARDNESS">2</field>
+    <field name="RES">15</field>
+  </block>
+</xml>
