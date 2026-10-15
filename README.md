@@ -1,27 +1,14 @@
-# MC Scratch Copilot
+# mc-scratch-copilot
 
-Scratch-like desktop constructor for Minecraft Forge 1.20.1.
+Electron + Blockly scaffold to generate Minecraft Forge 1.20.1 mod projects.
 
-This repository contains:
-- `source/` project scaffold with an Electron desktop editor
-- `source/forge-mdk/` Forge 1.20.1 MDK-style structure
-- `run.bat` and `run.sh` startup scripts
-- the root-level MDK zip provided by the user
+Usage:
+1. Clone the repo and checkout branch feat/scratch-electron-modding.
+2. npm install
+3. npm run start (or double-click run.bat / run.sh)
+4. Create items/blocks using the Blockly UI and press "Сгенерировать проект".
+5. Optionally set FORGE_MDK_URL to the Forge MDK zip URL for 1.20.1 and run the download script to extract the MDK into the generated project folder. Then press "Собрать .jar" to run gradlew build.
 
-## Quick start
+Notes:
+- This is an initial MVP scaffold. The code generator creates Java sources and resources into generated_projects/<modid>/. You need to merge those files into the official Forge MDK folder (or set FORGE_MDK_URL so the app can fetch the MDK automatically) to build the mod.
 
-Windows:
-```bat
-run.bat
-```
-
-Linux/macOS:
-```bash
-chmod +x run.sh
-./run.sh
-```
-
-## Notes
-- The visual editor is built around Blockly and a Scratch-inspired UX.
-- Generated code targets Forge 1.20.1 Java classes.
-- The app includes a "Build Mod (.jar)" button that runs Gradle in the Forge MDK folder.

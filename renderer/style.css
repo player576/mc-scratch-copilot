@@ -1,0 +1,11 @@
+body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+header { background: #ffcc00; padding: 10px 20px; }
+#main { display: flex; height: calc(100vh - 60px); }
+#palette { width: 220px; background: #f4f4f4; padding: 10px; box-sizing: border-box; }
+#workspace { flex: 1; padding: 10px; }
+#preview { width: 300px; background: #fff; border-left: 1px solid #ddd; padding: 10px; box-sizing: border-box; }
+#blocklyDiv { height: 100%; width: 100%; }
+#controls { margin-top: 10px; }
+#controls input { width: 100%; margin-bottom: 6px; padding: 6px; box-sizing: border-box; }
+#controls button { width: 100%; padding: 8px; margin-top: 4px; }
+pre { white-space: pre-wrap; word-wrap: break-word; max-height: 90%; overflow: auto; }
